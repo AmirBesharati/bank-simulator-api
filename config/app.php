@@ -235,4 +235,9 @@ return [
 
     ],
 
+    'currency' => [
+        'name' => 'Dollar' ,
+        'symbol' => '$'
+    ]
+
 ];

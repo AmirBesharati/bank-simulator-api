@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AccountController;
+use App\Http\Controllers\Api\V1\AccountTypeController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Http\Request;
@@ -31,6 +33,15 @@ Route::middleware(['api'])->group(function () {
 
             Route::group(['prefix' => 'user' , 'as' => 'user.'] , function (){
                 Route::get('/' , [UserController::class , 'user'])->name('user');
+            });
+
+            Route::group(['prefix' => 'account' , 'as' => 'account.'] , function (){
+
+                Route::group(['prefix' => 'type' , 'as' => 'type.'] , function (){
+                    Route::get('list' , [AccountTypeController::class , 'list'])->name('list');
+                });
+
+                Route::post('create' , [AccountController::class , 'create'])->name('create');
             });
 
         });
