@@ -13,11 +13,20 @@ class CreateAccountTypesMigration extends Migration
      */
     public function up()
     {
-        Schema::create('account_types_migration', function (Blueprint $table) {
-            $table->id();
+        Schema::create('account_types', function (Blueprint $table) {
+            $table->smallIncrements('id');
             $table->string('title')->unique();
-            $table->text('description');
+            $table->text('description')->nullable();
+            $table->unsignedDouble('start_balance');
+            $table->softDeletes();
         });
+
+
+        //add default account types after crating table
+        DB::table('account_types')->insert(
+            config('enums.account_types')
+        );
+
     }
 
     /**
