@@ -2,7 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\Services\Api\ApiResponseServiceFacade;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -26,6 +29,21 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
+
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        return ApiResponseServiceFacade::setStatus(config('enums.response_statuses.unauthorized'))
+                ->setResultMessage(__('messages.api.auth.unauthenticated'))
+                ->response();
+    }
+
+    protected function convertValidationExceptionToResponse(ValidationException $e, $request)
+    {
+        return ApiResponseServiceFacade::setStatus(config('enums.response_statuses.unprocessable_entity'))
+            ->setResultMessage(__('messages.validation.message'))
+            ->setErrors($e->errors())
+            ->response();
+    }
 
     /**
      * Register the exception handling callbacks for the application.
