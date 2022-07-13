@@ -12,4 +12,24 @@ return [
     ] ,
 
 
+    'account_types' => [
+        [
+            'title' => 'Saving Account' ,
+            'start_balance' => 10000
+        ]  ,
+        [
+            'title' => 'Checking Account' ,
+            'start_balance' => 20000
+        ]  ,
+        [
+            'title' => 'Money Market Account' ,
+            'start_balance' => 30000
+        ]  ,
+        [
+            'title' => 'Certificate of Deposit (CD)' ,
+            'start_balance' => 40000
+        ]  ,
+    ]
+
+
 ];
