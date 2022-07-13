@@ -6,52 +6,87 @@ namespace App\Services\Api;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
+use phpDocumentor\Reflection\Types\Mixed_;
 
 class ApiResponseService
 {
-    public $content = [];
+    private $content = [];
     private $status;
-
-    private $response;
+    private $errors;
+    private $responseData;
     private $resultMessage;
 
-    /**
-     * WebserviceResponse constructor.
-     * @param $result_code
-     * @param null $resultMessage
-     */
-    public function __construct($status, $resultMessage = null)
+    private function getContent(): array
+    {
+        return $this->content;
+    }
+
+    public function setContent(string $key , $value): ApiResponseService
+    {
+        $this->content[$key] = $value;
+        return $this;
+    }
+
+    public function setContents(array $content): ApiResponseService
+    {
+        $this->content = $content;
+        return $this;
+    }
+
+    private function getStatus()
+    {
+        return $this->status ?? config('enums.response_statuses.success') ;
+    }
+
+    public function setStatus(int $status): ApiResponseService
     {
         $this->status = $status;
-        if(!is_null($resultMessage)){
-            $this->resultMessage = $resultMessage;
-        }
+        return $this;
     }
 
-    public function __invoke(): Response
+    private function getErrors()
     {
-        $this->response['data'] = $this->content;
-        $this->response['status'] = $this->status;
-        if($this->getResultMessage() != null){
-            $this->response['message'] = $this->getResultMessage();
-        }
-
-        return new Response(json_encode($this->response) ,200 , [
-            'content-type' => 'application/json' ,
-        ]);
+        return $this->errors;
     }
 
-    public function getResultMessage()
+    public function setErrors(array $errors): ApiResponseService
+    {
+        $this->errors = $errors;
+        return $this;
+    }
+
+    public function setError(string $key , $error): ApiResponseService
+    {
+        $this->errors[$key] = $error;
+        return $this;
+    }
+
+    private function getResultMessage()
     {
         return $this->resultMessage;
     }
 
-    public function addPaginator(ResourceCollection $resource)
+    public function setResultMessage($resultMessage): ApiResponseService
     {
-        $this->content['pagination'] = [
-            'current_page'=> $resource->currentPage(),
-            'total_items'=> $resource->total() ,
-            'total_pages'=> $resource->LastPage(),
-        ];
+        $this->resultMessage = $resultMessage;
+        return $this;
+    }
+
+    public function response(): Response
+    {
+        $this->responseData['data'] = $this->getContent();
+        $this->responseData['status'] = $this->getStatus();
+
+        if($this->getResultMessage() != null){
+            $this->responseData['message'] = $this->getResultMessage();
+        }
+
+        if($this->getErrors() != null){
+            $this->responseData['errors'] = $this->getErrors();
+        }
+
+        return new Response(json_encode($this->responseData) ,$this->getStatus() , [
+            'content-type' => 'application/json' ,
+        ]);
     }
 }
