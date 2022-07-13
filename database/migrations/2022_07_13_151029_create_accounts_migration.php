@@ -13,15 +13,20 @@ class CreateAccountsMigration extends Migration
      */
     public function up()
     {
-        Schema::create('accounts_migration', function (Blueprint $table) {
-            $table->id();
-            $table->integer('user_id');
-            $table->smallInteger('account_type_id');
+        Schema::create('accounts', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('user_id');
+            $table->unsignedSmallInteger('account_type_id');
             $table->string('name');
-            $table->integer('balance');
+            $table->unsignedInteger('number')->unique();
+            $table->unsignedDouble('balance');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('account_type_id')->references('id')->on('account_types')->onDelete('cascade');
         });
+
     }
 
     /**
