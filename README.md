@@ -1,64 +1,85 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## Introduction 
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This project was developed and structured based on the following expectation but also there are additional classes and APIs to be more familiar with my programming knowledge
 
-## About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+    1- authentication method 
+    
+    2- migrations and database seeders 
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+    3- models 
 
-## Learning Laravel
+    4- base repository and model repository 
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+    5- query builder 
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    6- services and chain checkers classes 
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### Premium Partners
+###installation
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+## 1- authentication method
+The project use sanctum to authenticate API user
 
-## Contributing
+#
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 2- migrations and database seeders
+All tables migration columns are too clear but 2 complexes have static data, this means after migrating these tables data will automatically insert into these tables, the reason is that these tables' data always are static and never won't change
 
-## Code of Conduct
+<img src="https://raw.githubusercontent.com/AmirBesharati/bank-simulator-api/master/database/diagram/Diagram.jpg"/>
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#
 
-## Security Vulnerabilities
+## 3 - Models 
+All data models stored in App\Models 
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+###
 
-## License
+- #####UserModel : user or customer of api 
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+- ####AccountModel : represent the bank account of the user and users can have multiple accounts
+
+######NOTE:
+    Balance of account also store in Account model
+    
+    each account is related to a specific account type (account types are static)
+
+- ####AccountTypeModel : represent available types of account  
+
+######NOTE:
+    Account types data read from enums and insert into the database during migration
+
+- #####TransactionModel : represent account transactions 
+
+######NOTE:
+    - Every tranaction has an receiver and a sender but sender could be null in some type of transaction 
+    - After creating a transaction, the TransactionCreatedEvent will call
+
+
+- #####TransactionTypeModel : represent all transaction types such as internal, external, create account reward and etc...
+######NOTE:
+    Transaction types data read from enums and insert into the database during migration
+
+#
+
+## 4 - Base repository and model repository
+All database transactions should handle in the corresponding repository of model, all repos are extend from a parent one that has general functions such as (find , findBy , Create , CreateWithingModel , Update and etc.... )
+
+#
+
+
+## 5 - Query builder (my favorite part)
+The main reason of using query builders is that it can filter list data and sorting them is right order with few line of codes 
+
+
+#
+
+## 6 - services and chain checkers classes
+ - **`ApiResponseService`**: The ApiResponseService class handles all the API responses it can help us to have one structure for all responses
+ - **`TransactionService`**: The TransactionService class manages all transaction that the user wants to create it checks the availaibility of the account and check requirements to reassure that everything work well
+
+
+
