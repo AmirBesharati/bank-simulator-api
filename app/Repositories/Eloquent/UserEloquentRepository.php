@@ -23,4 +23,11 @@ class UserEloquentRepository extends EloquentBaseRepository implements UserRepos
 
         return $user->accounts()->create(array_merge($items , ['number' => $number]));
     }
+
+    public function account(User $user , $accountId)
+    {
+        return $user->accounts()->findOrFail($accountId);
+    }
+
+
 }
