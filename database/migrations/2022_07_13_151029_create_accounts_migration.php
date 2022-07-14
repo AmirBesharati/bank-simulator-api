@@ -20,6 +20,7 @@ class CreateAccountsMigration extends Migration
             $table->string('name');
             $table->unsignedInteger('number')->unique();
             $table->unsignedDouble('balance');
+            $table->tinyInteger('is_active')->default(1);
             $table->timestamps();
             $table->softDeletes();
 
