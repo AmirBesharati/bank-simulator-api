@@ -33,14 +33,20 @@ return [
 
 
     'transaction_types' => [
-        'INTERNAL' => [
+        'CREATE_ACCOUNT' => [
             'id' => 1 ,
+            'title' => 'Create Account Reward' ,
+//            'fee' => '' ,
+//            'fee_type' => '' ,
+        ]  ,
+        'INTERNAL' => [
+            'id' => 2 ,
             'title' => 'Internal Transfer' ,
 //            'fee' => '' ,
 //            'fee_type' => '' ,
         ]  ,
         'EXTERNAL' => [
-            'id' => 2 ,
+            'id' => 3 ,
             'title' => 'External Transfer' ,
 //            'fee' => '' ,
 //            'fee_type' => '' ,

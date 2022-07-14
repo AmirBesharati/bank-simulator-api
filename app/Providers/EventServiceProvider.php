@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\AccountCreatedEvent;
 use App\Events\TransactionCreatedEvent;
+use App\Listeners\AddTransactionForCreatedAccountListener;
 use App\Listeners\UpdateAccountBalanceListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -20,6 +22,11 @@ class EventServiceProvider extends ServiceProvider
         TransactionCreatedEvent::class => [
             UpdateAccountBalanceListener::class,
         ],
+
+        AccountCreatedEvent::class => [
+            AddTransactionForCreatedAccountListener::class
+        ] ,
+
     ];
 
     /**

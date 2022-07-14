@@ -118,7 +118,7 @@ class TransactionService implements TransactionServiceInterface
 
 
             //create transaction record
-            $transaction = $this->accountRepository->transaction($this->getSenderAccount(), [
+            $transaction = $this->accountRepository->sendTransaction($this->getSenderAccount(), [
                 'receiver_account_id' => $this->getReceiverAccount()->id,
                 'amount' => $this->getAmount(),
                 'note' => $this->getNote(),
@@ -134,9 +134,6 @@ class TransactionService implements TransactionServiceInterface
 
             return $transaction;
         } catch (\Exception $exception) {
-
-            dd($exception->getMessage());
-
             $this->accountRepository->rollback();
         }
 

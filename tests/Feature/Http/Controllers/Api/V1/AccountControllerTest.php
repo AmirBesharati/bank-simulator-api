@@ -130,20 +130,4 @@ class AccountControllerTest extends TestCase
 
         $this->assertEquals($account->balance , $account->accountType->start_balance);
     }
-
-    /** @test */
-    public function a_balance_must_equals_to_user_initial_deposit_amount()
-    {
-        $user = User::factory()->create();
-
-        $this->actingAs($user);
-
-        $response = $this->post(route('api.v1.account.create', $data = array_merge($this->account_data() , ['balance' => 2000 ])));
-
-        $this->assertArrayHasKey('account', $response->json()['data']);
-
-        $account = Account::first();
-
-        $this->assertEquals($account->balance , $data['balance']);
-    }
 }

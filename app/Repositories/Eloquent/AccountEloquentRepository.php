@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\Events\TransactionCreatedEvent;
 use App\Models\Account;
+use App\Models\AccountType;
 use App\Repositories\Contracts\AccountRepositoryInterface;
 
 class AccountEloquentRepository extends EloquentBaseRepository implements AccountRepositoryInterface
@@ -21,19 +23,31 @@ class AccountEloquentRepository extends EloquentBaseRepository implements Accoun
         return $number;
     }
 
-    public function transaction(Account $senderAccount, array $array): \Illuminate\Database\Eloquent\Model
+    public function sendTransaction(Account $senderAccount, array $array): \Illuminate\Database\Eloquent\Model
     {
-
         return $senderAccount->sentTransactions()->create($array);
+    }
+
+    public function createInitialAccountTransaction(Account $receiverAccount , AccountType $accountType , $referenceCode )
+    {
+        $receiverAccount->receivedTransactions()->create([
+            'amount' => $accountType->start_balance ,
+            'note' => 'Create account reward' ,
+            'transaction_type_id' => config('enums.transaction_types.CREATE_ACCOUNT.id') ,
+            'reference_code' =>  $referenceCode ,
+        ]);
+
+        //call transaction created event
+        event(new TransactionCreatedEvent($receiverAccount));
     }
 
     /**
      * @description : sum received transaction and sent transaction amount to calculate account balance
      */
-    public function reBalanceAccount(Account $account): bool
+    public function reBalanceAccount(Account $account)
     {
         $balance = $account->receivedTransactions()->sum('amount') - $account->sentTransactions()->sum('amount');
 
-        return $this->updateWithinModel($account , ['balance' => $balance]);
+        $this->updateWithinModel($account , ['balance' => $balance]);
     }
 }

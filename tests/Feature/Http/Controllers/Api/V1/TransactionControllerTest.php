@@ -2,7 +2,9 @@
 
 namespace Tests\Feature\Http\Controllers\Api\V1;
 
+use App\Events\AccountCreatedEvent;
 use App\Models\Account;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -35,14 +37,15 @@ class TransactionControllerTest extends TestCase
 
 
         //create account for first user
-        Account::factory()->create([
+        event(new AccountCreatedEvent(Account::factory()->create([
             'user_id' => $firstUser ,
-        ]);
+        ])));
 
-        //create account for second user
-        Account::factory()->create([
+
+        event(new AccountCreatedEvent(Account::factory()->create([
             'user_id' => $secondUser ,
-        ]);
+        ])));
+
 
 
         //check account is created or not
@@ -57,7 +60,11 @@ class TransactionControllerTest extends TestCase
             'account_number' => $secondUser->accounts()->first()->number ,
         ]));
 
-        //check transaction
+
+        //check transaction sender and receiver
+        $this->assertEquals($firstUser->accounts()->first()->id , Transaction::all()->last()->sender_account_id);
+        $this->assertEquals($secondUser->accounts()->first()->id , Transaction::all()->last()->receiver_account_id);
+
 
 
         $response->assertStatus(200);
@@ -65,17 +72,7 @@ class TransactionControllerTest extends TestCase
 
     public function a_destination_account_should_exists()
     {
-        //create 2 user
-        $user = User::factory()->create();
 
-        //create account for first user
-        Account::factory()->create([
-            'user_id' => $user ,
-        ]);
-
-        $response = $this->post(route('api.v1.account.transaction.create') , $this->transaction_data());
-
-        $response->assertUnprocessable();
     }
 
 }
