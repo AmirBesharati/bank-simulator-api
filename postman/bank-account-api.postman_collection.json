@@ -1,0 +1,282 @@
+{
+	"info": {
+		"_postman_id": "8a8c0363-923d-418b-91e8-a5caac4cec79",
+		"name": "bank-account-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3209495"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Amir\" ,\r\n    \"email\" : \"amirbesharati59@gmail.com\" , \r\n    \"password\" : \"1234@Amir#\" ,\r\n    \"password_confirmation\" : \"1234@Amir#\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASEURL}}/auth/register",
+							"host": [
+								"{{BASEURL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"dare.orpha@example.org\" , \r\n    \"password\" : \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASEURL}}/auth/login",
+							"host": [
+								"{{BASEURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "initial user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASEURL}}/user",
+							"host": [
+								"{{BASEURL}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Transactions",
+					"item": [
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \r\n}"
+								},
+								"url": {
+									"raw": "{{BASEURL}}/account/1/transaction/create",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"account",
+										"1",
+										"transaction",
+										"create"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "list",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASEURL}}/account/11/transaction/history",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"account",
+										"11",
+										"transaction",
+										"history"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Type",
+					"item": [
+						{
+							"name": "list",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{BASEURL}}/account/type/list",
+									"host": [
+										"{{BASEURL}}"
+									],
+									"path": [
+										"account",
+										"type",
+										"list"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"account_type_id\" : 1 ,\r\n    \"name\" : \"amirs account\" , \r\n    \"balance\" : 10000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASEURL}}/account/create",
+							"host": [
+								"{{BASEURL}}"
+							],
+							"path": [
+								"account",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASEURL}}/account/list",
+							"host": [
+								"{{BASEURL}}"
+							],
+							"path": [
+								"account",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASEURL}}/account/11/detail",
+							"host": [
+								"{{BASEURL}}"
+							],
+							"path": [
+								"account",
+								"11",
+								"detail"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "1|eNSPCS8iwNURpeMYWjiLQHAhpjgwPbADbh2cCeP3",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.sendRequest({",
+					"    url: 'http://localhost:8000/sanctum/csrf-cookie',",
+					"    method: 'GET'",
+					"}, function (error, response, { cookies }) {",
+					"    if (!error) {",
+					"        pm.environment.set('xsrf-token', cookies.get('XSRF-TOKEN'))",
+					"    }",
+					"})",
+					"",
+					"pm.request.headers.add(",
+					"    {key: 'Accept', value: 'application/json'} ,",
+					"    {key: 'Content-type', value: 'application/json'}",
+					");"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASEURL",
+			"value": "127.0.0.1:8000/api/v1",
+			"type": "string"
+		}
+	]
+}
