@@ -13,6 +13,8 @@ use App\Repositories\Eloquent\TransactionEloquentRepository;
 use App\Repositories\Eloquent\TransactionTypeEloquentRepository;
 use App\Repositories\Eloquent\UserEloquentRepository;
 use App\Services\Api\ApiResponseService;
+use App\Services\Transaction\TransactionService;
+use App\Services\Transaction\TransactionServiceInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(AccountRepositoryInterface::class , AccountEloquentRepository::class);
         $this->app->bind(TransactionTypeRepositoryInterface::class , TransactionTypeEloquentRepository::class);
         $this->app->bind(TransactionRepositoryInterface::class , TransactionEloquentRepository::class);
+
+        $this->app->bind(TransactionServiceInterface::class , TransactionService::class);
 
         $this->app->bind('apiResponseService',function(){
             return new ApiResponseService();

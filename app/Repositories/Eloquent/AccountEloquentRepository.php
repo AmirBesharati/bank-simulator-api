@@ -20,4 +20,20 @@ class AccountEloquentRepository extends EloquentBaseRepository implements Accoun
 
         return $number;
     }
+
+    public function transaction(Account $senderAccount, array $array): \Illuminate\Database\Eloquent\Model
+    {
+
+        return $senderAccount->sentTransactions()->create($array);
+    }
+
+    /**
+     * @description : sum received transaction and sent transaction amount to calculate account balance
+     */
+    public function reBalanceAccount(Account $account): bool
+    {
+        $balance = $account->receivedTransactions()->sum('amount') - $account->sentTransactions()->sum('amount');
+
+        return $this->updateWithinModel($account , ['balance' => $balance]);
+    }
 }

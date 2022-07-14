@@ -12,8 +12,17 @@ class TransactionControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function transaction_data()
+    {
+        return [
+            'account_number' => '102030' ,
+            'amount' => 100 ,
+            'note' => 'test'
+        ];
+    }
+
     /** @test */
-    public function create_transaction()
+    public function create_external_transaction()
     {
         $this->withoutExceptionHandling();
 
@@ -44,10 +53,11 @@ class TransactionControllerTest extends TestCase
         $this->actingAs($firstUser);
 
 
-        $response = $this->post(route('api.v1.transaction.create') , [
+        $response = $this->post(route('api.v1.account.transaction.create' , ['accountId' => $firstUser->accounts()->first()->id]) ,  array_merge($this->transaction_data() , [
             'account_number' => $secondUser->accounts()->first()->number ,
-            'amount' => 100
-        ]);
+        ]));
+
+        //check transaction
 
 
         $response->assertStatus(200);
@@ -63,10 +73,7 @@ class TransactionControllerTest extends TestCase
             'user_id' => $user ,
         ]);
 
-        $response = $this->post(route('api.v1.transaction.create') , [
-            'account_number' => 10 ,
-            'amount' => 10 ,
-        ]);
+        $response = $this->post(route('api.v1.account.transaction.create') , $this->transaction_data());
 
         $response->assertUnprocessable();
     }

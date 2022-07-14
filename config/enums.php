@@ -33,33 +33,15 @@ return [
 
 
     'transaction_types' => [
-        [
+        'INTERNAL' => [
+            'id' => 1 ,
             'title' => 'Internal Transfer' ,
 //            'fee' => '' ,
 //            'fee_type' => '' ,
         ]  ,
-        [
-            'title' => 'cash withdrawals or deposits' ,
-//            'fee' => '' ,
-//            'fee_type' => '' ,
-        ]  ,
-        [
-            'title' => 'checks' ,
-//            'fee' => '' ,
-//            'fee_type' => '' ,
-        ]  ,
-        [
-            'title' => 'online payments' ,
-//            'fee' => '' ,
-//            'fee_type' => '' ,
-        ]  ,
-        [
-            'title' => 'debit card charges' ,
-//            'fee' => '' ,
-//            'fee_type' => '' ,
-        ]  ,
-        [
-            'title' => 'loan payments' ,
+        'EXTERNAL' => [
+            'id' => 2 ,
+            'title' => 'External Transfer' ,
 //            'fee' => '' ,
 //            'fee_type' => '' ,
         ]  ,

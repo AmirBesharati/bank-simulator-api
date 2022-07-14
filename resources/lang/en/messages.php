@@ -11,5 +11,11 @@ return [
 
     'validation' => [
         'message' => 'The given data was invalid'
+    ] ,
+
+    'errors' => [
+        'transaction' => [
+            'make' => 'Cant create transaction'
+        ]
     ]
 ];
