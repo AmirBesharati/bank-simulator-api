@@ -101,7 +101,7 @@ class TransactionService implements TransactionServiceInterface
             }
 
             //find transaction type id
-            $transactionTypeId = $this->receiverAccount->id == $this->senderAccount->id
+            $transactionTypeId = $this->receiverAccount->user_id == $this->senderAccount->user_id
                 ? config('enums.transaction_types.INTERNAL.id')
                 : config('enums.transaction_types.EXTERNAL.id');
 
