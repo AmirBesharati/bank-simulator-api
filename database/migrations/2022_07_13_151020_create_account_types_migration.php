@@ -36,6 +36,6 @@ class CreateAccountTypesMigration extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('account_types_migration');
+        Schema::dropIfExists('account_types');
     }
 }
