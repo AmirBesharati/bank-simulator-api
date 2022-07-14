@@ -17,4 +17,15 @@ class Account extends Model
     {
         return $this->belongsTo(AccountType::class);
     }
+
+    public function sentTransactions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Transaction::class , 'sender_account_id' , 'id');
+    }
+
+    public function receivedTransactions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Transaction::class , 'receiver_account_id' , 'id');
+    }
+
 }
