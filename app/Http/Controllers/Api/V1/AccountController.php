@@ -53,4 +53,22 @@ class AccountController extends Controller
             ->setContent('account' , $account)
             ->response();
     }
+
+    public function list(Request $request)
+    {
+        $accounts = AccountResource::collection($request->user()->accounts);
+
+        return ApiResponseServiceFacade::setStatus(config('enums.response_statuses.success'))
+            ->setContent('accounts' , $accounts)
+            ->response();
+    }
+
+    public function detail(Request $request , $accountId)
+    {
+        $accounts = new AccountResource($request->user()->accounts()->findOrFail($accountId));
+
+        return ApiResponseServiceFacade::setStatus(config('enums.response_statuses.success'))
+            ->setContent('accounts' , $accounts)
+            ->response();
+    }
 }

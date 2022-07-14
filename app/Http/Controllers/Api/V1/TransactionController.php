@@ -18,13 +18,17 @@ class TransactionController extends Controller
 {
     private $accountRepository;
     private $userRepository;
+    private $transactionRepository;
 
     public function __construct(
         UserRepositoryInterface $userRepository ,
-        AccountRepositoryInterface $accountRepository)
+        AccountRepositoryInterface $accountRepository ,
+        TransactionRepositoryInterface $transactionRepository
+    )
     {
         $this->userRepository = $userRepository;
         $this->accountRepository = $accountRepository;
+        $this->transactionRepository = $transactionRepository;
     }
 
     public function create(TransactionRequest $request , $accountId , TransactionServiceInterface $transactionService)
@@ -57,6 +61,17 @@ class TransactionController extends Controller
 
         return ApiResponseServiceFacade::setStatus(config('enums.response_statuses.success'))
             ->setContent('transaction' , $transaction)
+            ->response();
+    }
+
+    public function history(Request $request , $accountId)
+    {
+        $account = $request->user()->accounts()->findOrFail($accountId);
+
+        $transactions = TransactionResource::collection($this->transactionRepository->filter($account , $request));
+
+        return ApiResponseServiceFacade::setStatus(config('enums.response_statuses.success'))
+            ->setContent('transactions' , $transactions)
             ->response();
     }
 }

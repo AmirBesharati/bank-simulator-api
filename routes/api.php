@@ -39,11 +39,13 @@ Route::middleware(['api'])->group(function () {
             Route::group(['prefix' => 'account' , 'as' => 'account.'] , function (){
 
                 Route::post('create' , [AccountController::class , 'create'])->name('create');
+                Route::get('list' , [AccountController::class , 'list'])->name('list');
+                Route::get('{accountId}/detail' , [AccountController::class , 'detail'])->name('detail');
 
-                Route::group(['prefix' => 'transaction' , 'as' => 'transaction.'] , function (){
-                    Route::post('{accountId}/create' , [TransactionController::class , 'create'])->name('create');
-                    Route::get('{accountId}/history' , [TransactionController::class , 'history'])->name('history');
-                    Route::get('{accountId}/detail/{transactionId}' , [TransactionController::class , 'detail'])->name('detail');
+                Route::group(['prefix' => '{accountId}/transaction' , 'as' => 'transaction.'] , function (){
+                    Route::post('/create' , [TransactionController::class , 'create'])->name('create');
+                    Route::get('/history' , [TransactionController::class , 'history'])->name('history');
+                    Route::get('/detail/{transactionId}' , [TransactionController::class , 'detail'])->name('detail');
                 });
 
                 Route::group(['prefix' => 'type' , 'as' => 'type.'] , function (){

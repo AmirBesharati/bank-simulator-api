@@ -3,15 +3,21 @@
 namespace App\Repositories\Eloquent;
 
 use App\Models\Account;
-use App\Models\AccountType;
 use App\Models\Transaction;
-use App\Models\TransactionType;
-use App\Repositories\Contracts\AccountTypeRepositoryInterface;
+use App\QueryBuilders\Eloquent\TransactionEloquentQueryBuilder;
 use App\Repositories\Contracts\TransactionRepositoryInterface;
+use Illuminate\Http\Request;
 
 class TransactionEloquentRepository extends EloquentBaseRepository implements TransactionRepositoryInterface
 {
     protected $model = Transaction::class;
+
+    private $transactionEloquentQueryBuilder;
+
+    public function __construct(TransactionEloquentQueryBuilder $transactionEloquentQueryBuilder)
+    {
+        $this->transactionEloquentQueryBuilder = $transactionEloquentQueryBuilder;
+    }
 
     public function generateUniqueReferenceCode()
     {
@@ -25,4 +31,11 @@ class TransactionEloquentRepository extends EloquentBaseRepository implements Tr
         return $number;
     }
 
+    public function filter(Account $account, Request $request)
+    {
+        return $this
+            ->transactionEloquentQueryBuilder
+            ->setAccountId($account->id)
+            ->makeObjectFromRequest($request)->getResult();
+    }
 }
