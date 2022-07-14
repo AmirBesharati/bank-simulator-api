@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AccountController;
 use App\Http\Controllers\Api\V1\AccountTypeController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\TransactionController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,12 +37,17 @@ Route::middleware(['api'])->group(function () {
             });
 
             Route::group(['prefix' => 'account' , 'as' => 'account.'] , function (){
-
                 Route::group(['prefix' => 'type' , 'as' => 'type.'] , function (){
                     Route::get('list' , [AccountTypeController::class , 'list'])->name('list');
                 });
-
                 Route::post('create' , [AccountController::class , 'create'])->name('create');
+            });
+
+            Route::group(['prefix' => 'transaction' , 'as' => 'transaction.'] , function (){
+                Route::post('create' , [TransactionController::class , 'create'])->name('create');
+                Route::get('detail' , [TransactionController::class , 'detail'])->name('detail');
+                Route::get('history' , [TransactionController::class , 'history'])->name('history');
+
             });
 
         });
