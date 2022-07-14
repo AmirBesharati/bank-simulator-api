@@ -8,4 +8,6 @@ interface UserRepositoryInterface
 {
 
     public function storeAccount(User $user , array $items);
+
+    public function account(User $user ,int $accountId);
 }
